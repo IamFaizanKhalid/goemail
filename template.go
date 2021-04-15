@@ -5,7 +5,7 @@ import (
 	"html/template"
 )
 
-func MessageFromHtmlTemplate(templateFile string, templateValues map[string]interface{}) (string, error) {
+func MessageFromHtmlTemplate(templateFile string, templateValues interface{}) (string, error) {
 	t, err := template.ParseFiles(templateFile)
 	if err != nil {
 		return "", err
