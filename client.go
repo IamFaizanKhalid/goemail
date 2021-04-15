@@ -43,8 +43,17 @@ func (c *Client) NewMailer(elems *Mail) (*Mailer, error) {
 		m.recipients += user.String() + ", "
 		m.to = append(m.to, user.Email)
 	}
-
 	m.recipients = m.recipients[:len(m.recipients)-2]
+
+	for _, user := range elems.Cc {
+		m.copyRecipients += user.String() + ", "
+		m.to = append(m.to, user.Email)
+	}
+	m.copyRecipients = m.copyRecipients[:len(m.copyRecipients)-2]
+
+	for _, user := range elems.Bcc {
+		m.to = append(m.to, user.Email)
+	}
 
 	return &m, nil
 }

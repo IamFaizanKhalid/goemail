@@ -11,6 +11,8 @@ type Config struct {
 
 type Mail struct {
 	To      []User `validate:"nonzero"`
+	Cc      []User
+	Bcc     []User
 	From    *User
 	Subject string `validate:"nonzero"`
 	Message string `validate:"nonzero"`
