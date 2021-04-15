@@ -2,6 +2,10 @@ package goemail
 
 import "fmt"
 
+type Mailer interface {
+	Send() error
+}
+
 type Config struct {
 	Host     string `validate:"nonzero"`
 	Port     string `validate:"regexp=^\d{2,5}$"`
