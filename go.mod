@@ -1,4 +1,4 @@
-module github.com/IamFaizanKhalid/go-mailer
+module github.com/IamFaizanKhalid/goemail
 
 go 1.13
 

@@ -1,1 +1,1 @@
-# go-mailer
+# goemail
