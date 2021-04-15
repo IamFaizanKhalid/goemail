@@ -22,38 +22,38 @@ func (m *simpleMailer) Send() error {
 	return smtp.SendMail(m.client.addr, m.client.auth, m.from, m.to, message)
 }
 
-func (c *Client) NewSimpleMailer(elems *Mail) (Mailer, error) {
-	if err := validator.Validate(elems); err != nil {
+func (c *Client) NewSimpleMailer(mail *Mail) (Mailer, error) {
+	if err := validator.Validate(mail); err != nil {
 		return nil, err
 	}
 
 	m := simpleMailer{
-		subject: elems.Subject,
-		message: elems.Message,
+		subject: mail.Subject,
+		message: mail.Message,
 		client:  c,
 	}
 
-	if elems.From == nil {
+	if mail.From == nil {
 		m.sender = c.config.Email
 		m.from = c.config.Email
 	} else {
-		m.sender = elems.From.String()
-		m.from = elems.From.Email
+		m.sender = mail.From.String()
+		m.from = mail.From.Email
 	}
 
-	for _, user := range elems.To {
+	for _, user := range mail.To {
 		m.recipients += user.String() + ", "
 		m.to = append(m.to, user.Email)
 	}
 	m.recipients = m.recipients[:len(m.recipients)-2]
 
-	for _, user := range elems.Cc {
+	for _, user := range mail.Cc {
 		m.copyRecipients += user.String() + ", "
 		m.to = append(m.to, user.Email)
 	}
 	m.copyRecipients = m.copyRecipients[:len(m.copyRecipients)-2]
 
-	for _, user := range elems.Bcc {
+	for _, user := range mail.Bcc {
 		m.to = append(m.to, user.Email)
 	}
 
