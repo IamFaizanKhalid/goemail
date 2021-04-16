@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"encoding/base64"
 	"fmt"
-	"io/ioutil"
 	"mime"
 	"net/smtp"
+	"os"
 	"path/filepath"
 	"time"
 )
@@ -78,16 +78,15 @@ func (m *simpleMailer) AddHeader(key string, value string) {
 	m.customHeaders = append(m.customHeaders, Header{Key: key, Value: value})
 }
 
-func (m *simpleMailer) attach(file string, inline bool) error {
-	data, err := ioutil.ReadFile(file)
+func (m *simpleMailer) attach(file *os.File, inline bool) error {
+	var data []byte
+	_, err := file.Read(data)
 	if err != nil {
 		return err
 	}
 
-	_, filename := filepath.Split(file)
-
-	m.attachments[filename] = &Attachment{
-		Filename: filename,
+	m.attachments[file.Name()] = &Attachment{
+		Filename: file.Name(),
 		Data:     data,
 		Inline:   inline,
 	}
@@ -95,12 +94,12 @@ func (m *simpleMailer) attach(file string, inline bool) error {
 	return nil
 }
 
-func (m *simpleMailer) AttachFile(filePath string) error {
-	return m.attach(filePath, false)
+func (m *simpleMailer) AttachFile(file *os.File) error {
+	return m.attach(file, false)
 }
 
-func (m *simpleMailer) InsertFile(filePath string) error {
-	return m.attach(filePath, true)
+func (m *simpleMailer) InsertFile(file *os.File) error {
+	return m.attach(file, true)
 }
 
 func removeLastComma(s string) string {

@@ -1,6 +1,9 @@
 package goemail
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
 type Client interface {
 	NewMailer(subject string, body string) Mailer
@@ -16,8 +19,8 @@ type Mailer interface {
 	AddReplyToMail(email string)
 	AddSubject(subject string)
 	AddHeader(key string, value string)
-	InsertFile(filePath string) error
-	AttachFile(filePath string) error
+	InsertFile(file *os.File) error
+	AttachFile(file *os.File) error
 	SendEmail() error
 }
 
