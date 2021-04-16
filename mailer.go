@@ -150,6 +150,7 @@ func (m *simpleMailer) parseMessage() []byte {
 			if attachment.Inline {
 				buf.WriteString("Content-Type: message/rfc822\r\n")
 				buf.WriteString("Content-Disposition: inline; filename=\"" + attachment.Filename + "\"\r\n\r\n")
+				buf.WriteString("Content-Transfer-Encoding: base64\r\n")
 
 				buf.Write(attachment.Data)
 			} else {
