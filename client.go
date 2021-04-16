@@ -1,9 +1,7 @@
 package goemail
 
 import (
-	"bytes"
 	"fmt"
-	"html/template"
 	"net/smtp"
 )
 
@@ -44,16 +42,10 @@ func (c *mailClient) NewHtmlMailer(subject string, message string) Mailer {
 }
 
 func (c *mailClient) NewHtmlMailerFromTemplate(subject string, templateFile string, templateValues interface{}) (Mailer, error) {
-	t, err := template.ParseFiles(templateFile)
+	message, err := MessageFromHtmlTemplate(templateFile, templateValues)
 	if err != nil {
 		return nil, err
 	}
 
-	var message bytes.Buffer
-	err = t.Execute(&message, templateValues)
-	if err != nil {
-		return nil, err
-	}
-
-	return c.newMailer(subject, message.String(), "text/html"), nil
+	return c.newMailer(subject, message, "text/html"), nil
 }
