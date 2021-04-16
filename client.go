@@ -21,6 +21,7 @@ type mailClient struct {
 
 func (c *mailClient) newMailer(subject string, body string, contentType string) Mailer {
 	m := &simpleMailer{
+		client:  c,
 		subject: subject,
 		from:    c.config.Email,
 		body:    body,
