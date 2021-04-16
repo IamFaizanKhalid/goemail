@@ -78,28 +78,35 @@ func (m *simpleMailer) AddHeader(key string, value string) {
 	m.customHeaders = append(m.customHeaders, Header{Key: key, Value: value})
 }
 
-func (m *simpleMailer) attach(file *os.File, inline bool) error {
-	var data []byte
-	_, err := file.Read(data)
+func (m *simpleMailer) attach(fileName string, binary []byte, inline bool) {
+	m.attachments[fileName] = &Attachment{
+		Filename: fileName,
+		Data:     binary,
+		Inline:   inline,
+	}
+}
+
+func (m *simpleMailer) readAndAttach(file *os.File, inline bool) error {
+	var binary []byte
+	_, err := file.Read(binary)
 	if err != nil {
 		return err
 	}
 
-	m.attachments[file.Name()] = &Attachment{
-		Filename: file.Name(),
-		Data:     data,
-		Inline:   inline,
-	}
-
+	m.attach(file.Name(), binary, inline)
 	return nil
 }
 
 func (m *simpleMailer) AttachFile(file *os.File) error {
-	return m.attach(file, false)
+	return m.readAndAttach(file, false)
+}
+
+func (m *simpleMailer) AttachFileBytes(fileName string, binary []byte) {
+	m.attach(fileName, binary, false)
 }
 
 func (m *simpleMailer) AddInlineFile(file *os.File) error {
-	return m.attach(file, true)
+	return m.readAndAttach(file, true)
 }
 
 func removeLastComma(s string) string {

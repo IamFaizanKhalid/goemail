@@ -21,6 +21,7 @@ type Mailer interface {
 	SetReplyToEmail(email string)
 	SetSubject(subject string)
 	AttachFile(file *os.File) error
+	AttachFileBytes(fileName string, binary []byte)
 	Send() error
 }
 
