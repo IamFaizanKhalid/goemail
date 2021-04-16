@@ -16,13 +16,13 @@ import (
 type simpleMailer struct {
 	client         *mailClient
 	defaultHeaders mailHeaders
-	customHeaders  []Header
+	customHeaders  []header
 	to             []string
 	from           string
 	recipients     string
 	subject        string
 	body           string
-	attachments    map[string]*Attachment
+	attachments    map[string]*attachment
 }
 
 type mailHeaders struct {
@@ -31,6 +31,17 @@ type mailHeaders struct {
 	cc          string
 	replyTo     string
 	contentType string
+}
+
+type header struct {
+	Key   string
+	Value string
+}
+
+type attachment struct {
+	Filename string
+	Data     []byte
+	Inline   bool
 }
 
 func (m *simpleMailer) AddRecipients(emails []mail.Address) {
@@ -77,11 +88,11 @@ func (m *simpleMailer) SetSubject(subject string) {
 }
 
 func (m *simpleMailer) AddHeader(key string, value string) {
-	m.customHeaders = append(m.customHeaders, Header{Key: key, Value: value})
+	m.customHeaders = append(m.customHeaders, header{Key: key, Value: value})
 }
 
 func (m *simpleMailer) attach(fileName string, binary []byte, inline bool) {
-	m.attachments[fileName] = &Attachment{
+	m.attachments[fileName] = &attachment{
 		Filename: fileName,
 		Data:     binary,
 		Inline:   inline,

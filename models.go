@@ -32,14 +32,3 @@ type Config struct {
 	Email    string
 	Password string
 }
-
-type Attachment struct {
-	Filename string
-	Data     []byte
-	Inline   bool
-}
-
-type Header struct {
-	Key   string
-	Value string
-}

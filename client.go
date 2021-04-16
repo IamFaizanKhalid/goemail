@@ -30,7 +30,7 @@ func (c *mailClient) newMailer(subject string, body string, contentType string) 
 			contentType: contentType,
 		},
 	}
-	m.attachments = make(map[string]*Attachment)
+	m.attachments = make(map[string]*attachment)
 	return m
 }
 
