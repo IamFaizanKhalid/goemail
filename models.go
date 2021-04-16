@@ -15,13 +15,13 @@ type Mailer interface {
 	AddRecipients(emails []User)
 	AddCopyRecipients(emails []User)
 	AddBlindCopyRecipients(emails []User)
-	AddSender(u User)
-	AddReplyToMail(email string)
-	AddSubject(subject string)
 	AddHeader(key string, value string)
-	InsertFile(file *os.File) error
+	AddInlineFile(file *os.File) error
+	SetSender(u User)
+	SetReplyToEmail(email string)
+	SetSubject(subject string)
 	AttachFile(file *os.File) error
-	SendEmail() error
+	Send() error
 }
 
 type Config struct {

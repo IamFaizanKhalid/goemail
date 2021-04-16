@@ -61,16 +61,16 @@ func (m *simpleMailer) AddBlindCopyRecipients(emails []User) {
 	}
 }
 
-func (m *simpleMailer) AddSender(u User) {
+func (m *simpleMailer) SetSender(u User) {
 	m.from = u.Email
 	m.defaultHeaders.from = u.String()
 }
 
-func (m *simpleMailer) AddReplyToMail(email string) {
+func (m *simpleMailer) SetReplyToEmail(email string) {
 	m.defaultHeaders.replyTo = email
 }
 
-func (m *simpleMailer) AddSubject(subject string) {
+func (m *simpleMailer) SetSubject(subject string) {
 	m.subject = subject
 }
 
@@ -98,7 +98,7 @@ func (m *simpleMailer) AttachFile(file *os.File) error {
 	return m.attach(file, false)
 }
 
-func (m *simpleMailer) InsertFile(file *os.File) error {
+func (m *simpleMailer) AddInlineFile(file *os.File) error {
 	return m.attach(file, true)
 }
 
@@ -187,6 +187,6 @@ func (m *simpleMailer) parseMessage() []byte {
 	return buf.Bytes()
 }
 
-func (m *simpleMailer) SendEmail() error {
+func (m *simpleMailer) Send() error {
 	return smtp.SendMail(m.client.addr, m.client.auth, m.from, m.to, m.parseMessage())
 }
