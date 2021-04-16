@@ -2,8 +2,23 @@ package goemail
 
 import "fmt"
 
+type Client interface {
+	NewMailer(subject string, body string) Mailer
+	NewHtmlMailer(subject string, body string) Mailer
+	NewHtmlMailerFromTemplate(subject string, templateFile string, templateValues interface{}) (Mailer, error)
+}
+
 type Mailer interface {
-	Send() error
+	AddRecipients(emails []User)
+	AddCopyRecipients(emails []User)
+	AddBlindCopyRecipients(emails []User)
+	AddSender(u User)
+	AddReplyToMail(email string)
+	AddSubject(subject string)
+	AddHeader(key string, value string)
+	InsertFile(filePath string) error
+	AttachFile(filePath string) error
+	SendEmail() error
 }
 
 type Config struct {
@@ -13,13 +28,15 @@ type Config struct {
 	Password string
 }
 
-type Mail struct {
-	To      []User
-	Cc      []User
-	Bcc     []User
-	From    *User
-	Subject string
-	Message string
+type Attachment struct {
+	Filename string
+	Data     []byte
+	Inline   bool
+}
+
+type Header struct {
+	Key   string
+	Value string
 }
 
 type User struct {
