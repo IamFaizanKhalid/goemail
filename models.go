@@ -7,24 +7,24 @@ type Mailer interface {
 }
 
 type Config struct {
-	Host     string `validate:"nonzero"`
-	Port     string `validate:"regexp=^\d{2,5}$"`
-	Email    string `validate:"regexp=^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"`
-	Password string `validate:"min=5,max=256"`
+	Host     string
+	Port     string
+	Email    string
+	Password string
 }
 
 type Mail struct {
-	To      []User `validate:"nonzero"`
+	To      []User
 	Cc      []User
 	Bcc     []User
 	From    *User
-	Subject string `validate:"nonzero"`
-	Message string `validate:"nonzero"`
+	Subject string
+	Message string
 }
 
 type User struct {
 	Name  string
-	Email string `validate:"regexp=^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"`
+	Email string
 }
 
 func (u *User) String() string {

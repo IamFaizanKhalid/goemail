@@ -2,7 +2,6 @@ package goemail
 
 import (
 	"fmt"
-	"gopkg.in/validator.v2"
 	"net/smtp"
 )
 
@@ -22,11 +21,7 @@ func (m *htmlMailer) Send() error {
 	return smtp.SendMail(m.client.addr, m.client.auth, m.from, m.to, message)
 }
 
-func (c *Client) NewHtmlMailer(mail *Mail) (Mailer, error) {
-	if err := validator.Validate(mail); err != nil {
-		return nil, err
-	}
-
+func (c *Client) NewHtmlMailer(mail *Mail) Mailer {
 	m := htmlMailer{
 		subject: mail.Subject,
 		message: mail.Message,
@@ -57,5 +52,5 @@ func (c *Client) NewHtmlMailer(mail *Mail) (Mailer, error) {
 		m.to = append(m.to, user.Email)
 	}
 
-	return &m, nil
+	return &m
 }
