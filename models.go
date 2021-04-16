@@ -16,11 +16,12 @@ type Mailer interface {
 	AddCopyRecipients(emails []User)
 	AddBlindCopyRecipients(emails []User)
 	AddHeader(key string, value string)
-	AddInlineFile(file *os.File) error
+	AddInlineFile(filePath string) error
 	SetSender(u User)
 	SetReplyToEmail(email string)
 	SetSubject(subject string)
-	AttachFile(file *os.File) error
+	AttachFile(filePath string) error
+	AttachOpenedFile(file *os.File) error
 	AttachFileBytes(fileName string, binary []byte)
 	Send() error
 }

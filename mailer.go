@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"fmt"
+	"io/ioutil"
 	"mime"
 	"net/smtp"
 	"os"
@@ -97,16 +98,32 @@ func (m *simpleMailer) readAndAttach(file *os.File, inline bool) error {
 	return nil
 }
 
-func (m *simpleMailer) AttachFile(file *os.File) error {
+func (m *simpleMailer) openReadAndAttach(filePath string, inline bool) error {
+	binary, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		return err
+	}
+
+	_, fileName := filepath.Split(filePath)
+
+	m.attach(fileName, binary, inline)
+	return nil
+}
+
+func (m *simpleMailer) AddInlineFile(filePath string) error {
+	return m.openReadAndAttach(filePath, true)
+}
+
+func (m *simpleMailer) AttachFile(filePath string) error {
+	return m.openReadAndAttach(filePath, false)
+}
+
+func (m *simpleMailer) AttachOpenedFile(file *os.File) error {
 	return m.readAndAttach(file, false)
 }
 
 func (m *simpleMailer) AttachFileBytes(fileName string, binary []byte) {
 	m.attach(fileName, binary, false)
-}
-
-func (m *simpleMailer) AddInlineFile(file *os.File) error {
-	return m.readAndAttach(file, true)
 }
 
 func removeLastComma(s string) string {
