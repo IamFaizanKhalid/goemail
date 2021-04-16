@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"mime"
+	"net/mail"
 	"net/smtp"
 	"os"
 	"path/filepath"
@@ -32,38 +33,38 @@ type mailHeaders struct {
 	contentType string
 }
 
-func (m *simpleMailer) AddRecipients(emails []User) {
+func (m *simpleMailer) AddRecipients(emails []mail.Address) {
 	if len(emails) == 0 {
 		return
 	}
 
 	for _, email := range emails {
 		m.recipients += email.String() + ", "
-		m.to = append(m.to, email.Email)
+		m.to = append(m.to, email.Address)
 	}
 	m.recipients = removeLastComma(m.recipients)
 }
 
-func (m *simpleMailer) AddCopyRecipients(emails []User) {
+func (m *simpleMailer) AddCopyRecipients(emails []mail.Address) {
 	if len(emails) == 0 {
 		return
 	}
 
 	for _, email := range emails {
 		m.defaultHeaders.cc += email.String() + ", "
-		m.to = append(m.to, email.Email)
+		m.to = append(m.to, email.Address)
 	}
 	m.defaultHeaders.cc = removeLastComma(m.defaultHeaders.cc)
 }
 
-func (m *simpleMailer) AddBlindCopyRecipients(emails []User) {
+func (m *simpleMailer) AddBlindCopyRecipients(emails []mail.Address) {
 	for _, email := range emails {
-		m.to = append(m.to, email.Email)
+		m.to = append(m.to, email.Address)
 	}
 }
 
-func (m *simpleMailer) SetSender(u User) {
-	m.from = u.Email
+func (m *simpleMailer) SetSender(u mail.Address) {
+	m.from = u.Address
 	m.defaultHeaders.from = u.String()
 }
 

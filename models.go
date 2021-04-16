@@ -1,7 +1,7 @@
 package goemail
 
 import (
-	"fmt"
+	"net/mail"
 	"os"
 )
 
@@ -12,12 +12,12 @@ type Client interface {
 }
 
 type Mailer interface {
-	AddRecipients(emails []User)
-	AddCopyRecipients(emails []User)
-	AddBlindCopyRecipients(emails []User)
+	AddRecipients(emails []mail.Address)
+	AddCopyRecipients(emails []mail.Address)
+	AddBlindCopyRecipients(emails []mail.Address)
 	AddHeader(key string, value string)
 	AddInlineFile(filePath string) error
-	SetSender(u User)
+	SetSender(u mail.Address)
 	SetReplyToEmail(email string)
 	SetSubject(subject string)
 	AttachFile(filePath string) error
@@ -28,7 +28,7 @@ type Mailer interface {
 
 type Config struct {
 	Host     string
-	Port     string
+	Port     int
 	Email    string
 	Password string
 }
@@ -42,16 +42,4 @@ type Attachment struct {
 type Header struct {
 	Key   string
 	Value string
-}
-
-type User struct {
-	Name  string
-	Email string
-}
-
-func (u *User) String() string {
-	if u.Name == "" {
-		return u.Email
-	}
-	return fmt.Sprintf("%s <%s>", u.Name, u.Email)
 }

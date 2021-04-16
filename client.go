@@ -9,7 +9,7 @@ func NewClient(config *Config) Client {
 	return &mailClient{
 		config: config,
 		auth:   smtp.PlainAuth("", config.Email, config.Password, config.Host),
-		addr:   fmt.Sprintf("%v:%v", config.Host, config.Port),
+		addr:   fmt.Sprintf("%s:%d", config.Host, config.Port),
 	}
 }
 
