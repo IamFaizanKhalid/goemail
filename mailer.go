@@ -19,7 +19,6 @@ type simpleMailer struct {
 	customHeaders  []header
 	to             []string
 	from           string
-	recipients     string
 	subject        string
 	body           string
 	attachments    map[string]*attachment
@@ -50,10 +49,10 @@ func (m *simpleMailer) AddRecipients(emails []mail.Address) {
 	}
 
 	for _, email := range emails {
-		m.recipients += email.String() + ", "
+		m.defaultHeaders.to += email.String() + ", "
 		m.to = append(m.to, email.Address)
 	}
-	m.recipients = removeLastComma(m.recipients)
+	m.defaultHeaders.to = removeLastComma(m.defaultHeaders.to)
 }
 
 func (m *simpleMailer) AddCopyRecipients(emails []mail.Address) {
