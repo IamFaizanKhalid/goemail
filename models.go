@@ -53,6 +53,8 @@ type Mailer interface {
 	// AttachFileBytes puts the given bytes as an attached file to the email
 	AttachFileBytes(fileName string, binary []byte)
 
+	parseMessage() []byte
+
 	// Send sends the email
 	Send() error
 }
