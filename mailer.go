@@ -83,7 +83,7 @@ func (m *simpleMailer) SetReplyToEmail(email string) {
 	m.defaultHeaders.replyTo = email
 }
 
-func (m *simpleMailer) SetSubject(subject string) {
+func (m *simpleMailer) UpdateSubject(subject string) {
 	m.subject = subject
 }
 
@@ -184,8 +184,8 @@ func (m *simpleMailer) parseMessage() []byte {
 
 			if attachment.Inline {
 				buf.WriteString("Content-Type: message/rfc822\r\n")
-				buf.WriteString("Content-Disposition: inline; filename=\"" + attachment.Filename + "\"\r\n\r\n")
-				buf.WriteString("Content-Transfer-Encoding: base64\r\n")
+				buf.WriteString("Content-Disposition: inline; filename=\"" + attachment.Filename + "\"\r\n")
+				buf.WriteString("Content-Transfer-Encoding: base64\r\n\r\n")
 
 				buf.Write(attachment.Data)
 			} else {

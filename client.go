@@ -5,6 +5,7 @@ import (
 	"net/smtp"
 )
 
+// NewClient returns mail Client using smtp credentials
 func NewClient(config *Config) Client {
 	return &mailClient{
 		config: config,
